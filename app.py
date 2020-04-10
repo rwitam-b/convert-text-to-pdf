@@ -4,6 +4,10 @@ import pdfkit
 import os
 from datetime import datetime
 
+path_wkhtmltopdf = os.getenv(
+    "WKHTMLTOPDF_PATH", "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
+
 
 def convert_to_pdf(source_path, destination_path):
     options = {
@@ -30,16 +34,16 @@ def file_upload():
     if request.method == 'POST':
         # Getting present server time
         dateTimeObj = datetime.now()
-        timestampStr = dateTimeObj.strftime("%H%M%S%f")       
+        timestampStr = dateTimeObj.strftime("%H%M%S%f")
 
-        # Getting uploaded file details 
+        # Getting uploaded file details
         f = request.files['statement']
 
         # Constructing filenames
         input_filename = f.filename + "_" + timestampStr + '.txt'
-        output_filename = f.filename + "_" + timestampStr + '.pdf'      
-        download_filename = f.filename + '.pdf'  
-        
+        output_filename = f.filename + "_" + timestampStr + '.pdf'
+        download_filename = f.filename + '.pdf'
+
         # Saving file and converting to PDF
         f.save(input_filename)
         convert_to_pdf(input_filename, output_filename)
