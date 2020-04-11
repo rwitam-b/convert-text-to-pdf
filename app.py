@@ -4,8 +4,13 @@ import pdfkit
 import os
 from datetime import datetime
 
-path_wkhtmltopdf = os.getenv(
-    "WKHTMLTOPDF_PATH", "C:\\Program Files\\wkhtmltopdf\\bin\\wkhtmltopdf.exe")
+# Configuring the OS PATH variable to include the wkhtmltopdf binary path
+path_wkhtmltopdf = os.path.join(os.path.join(os.path.dirname(
+    os.path.realpath(__file__)), "bin"), "wkhtmltopdf")
+os.environ["PATH"] += os.pathsep + os.path.join(os.path.dirname(
+    os.path.realpath(__file__)), "bin")
+
+# Configuring pdfkit to point to wkhtmltopdf binary
 config = pdfkit.configuration(wkhtmltopdf=path_wkhtmltopdf)
 
 
@@ -16,7 +21,7 @@ def convert_to_pdf(source_path, destination_path):
         'margin-right': '0.75in',
         'margin-bottom': '0.75in',
         'margin-left': '0.75in',
-        'encoding': "UTF-8"
+        'encoding': 'UTF-8'
     }
     pdfkit.from_file(source_path, destination_path, options=options)
 
